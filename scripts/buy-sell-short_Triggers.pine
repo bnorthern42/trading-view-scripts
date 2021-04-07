@@ -1,0 +1,63 @@
+//@version=4
+
+//exponential 13
+study(title="Moving Average Exponential", shorttitle="EMA", overlay=true, resolution="")
+len = input(13, minval=1, title="Length")
+src = input(close, title="Source")
+offset = input(title="Offset", type=input.integer, defval=0, minval=-500, maxval=500)
+ema13 = ema(src, len)
+plot(ema13, title="EMA13", color=color.orange, offset=offset)
+
+
+// SImple 50
+len2 = input(49, minval=1, title="Length")
+src2 = input(close, title="Source")
+sma50 = sma(src2, len2)
+plot(sma50, title="MA 50", color=color.blue, offset=offset)
+
+//ema 200
+len3 = input(200, minval=1, title="Length")
+src3 = input(close, title="Source")
+ema200 = ema(src3, len3)
+plot(ema200, title="EMA 200", color=color.yellow, offset=offset)
+
+//macD
+fast = 12, slow = 26
+fastMA = ema(close, fast)
+slowMA = ema(close, slow)
+macd = fastMA - slowMA
+signal = sma(macd, 9)
+//plot(macd, color=color.blue)
+//plot(signal, color=color.orange)
+//get daily H/L
+hourHigh = security(syminfo.root, '60', high)
+hourLow  = security(syminfo.root, '60', low)
+prevHi = security(syminfo.root, '60', high[1], lookahead=true)
+prevhlow  = security(syminfo.root, '60', low[1], lookahead=true)
+
+High30 = security(syminfo.root, '30', high)
+Low30  = security(syminfo.root, '30', low)
+prevhi30 = security(syminfo.root, '30', high[1], lookahead=true)
+prevlo30  = security(syminfo.root, '30', low[1], lookahead=true)
+
+currlowday = security(syminfo.root, 'D', low)
+prevloday  = security(syminfo.root, 'D', low[1], lookahead=true)
+
+
+//RSI bounds too
+rsiSource = input(title="RSI Source", type=input.source, defval=close)
+rsiLength = input(title="RSI Length", type=input.integer, defval=14)
+rsiValue = rsi(rsiSource, rsiLength)
+
+longCond = crossover(ema13, sma50) and (sma50 > ema200) and (macd > signal) and (High30 > prevhlow) and (rsiValue < 70)// and (s50ema > s200ema)
+//longvalue = valuewhen((crossover(ema13, sma50) and (sma50 > ema200) and (macd > signal)))
+//shortCond = crossunder(ema13, sma50) and (sma50 < ema200)// and (s21ema < s50ema) and (s50ema < s200ema)
+sellCond = crossunder(ema13, sma50) and (sma50 > ema200) and (macd < signal) 
+stopshort = crossover(ema13, sma50) and( (macd > signal) and (sma50 < ema200) and (rsiValue >= 40) ) and ((hourLow < prevhlow) or (currlowday < prevloday) )
+
+plotshape(series=longCond, title="Long", style=shape.triangleup, location=location.belowbar, color=color.green, text="LONG", size=size.small)
+//plotshape(series=shortCond, title="Short", style=shape.triangledown, location=location.abovebar, color=color.red, text="SHORT", size=size.small)
+plotshape(series=sellCond, title="Short", style=shape.triangledown, location=location.abovebar, color=color.red, text="short/sell", size=size.small)
+plotshape(series=stopshort, title="stop Short", style=shape.triangleup, location=location.belowbar, color=color.orange, text="stop short", size=size.small)
+
+
