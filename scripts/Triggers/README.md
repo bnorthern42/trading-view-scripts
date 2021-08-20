@@ -3,13 +3,13 @@
 #### how to use:
 
 (long)
-  buy signal: on green tick tick
-  sell /short signal: on red tick
+ -  buy signal: on green tick tick
+ -  sell /short signal: on red tick
   
 (short)
-  short on red tick
-  warning to go long on green.
-  final warning to stop short on orange 'stop short'
+-  short on red tick
+-  warning to go long on green.
+-  final warning to stop short on orange 'stop short'
 
 ### Combination of: 
 
