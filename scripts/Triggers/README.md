@@ -1,5 +1,16 @@
 ### Works Best on 1H timeframe, But I'm working on getting it to work on 15m as well. 
 
+#### how to use:
+
+(long)
+  buy signal: on green tick tick
+  sell /short signal: on red tick
+  
+(short)
+  short on red tick
+  warning to go long on green.
+  final warning to stop short on orange 'stop short'
+
 ### Combination of: 
 
 * Uses: Trend, Price, Momentum. 
